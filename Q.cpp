@@ -103,8 +103,39 @@ void Q6(string userName, string password) {
 		res = pstmt->executeQuery();
 		while (res->next()) {
 			int p = res->getInt(2)*1.1; 
-			cout << "Book Name: " <<res->getString(1) << " Price before discount: "<<p<<"Price after discount: "<< res->getInt(2) << endl;
+			cout << "Book Name: " <<res->getString(1) << " Price before discount: "<<p<<" Price after discount: "<< res->getInt(2) << endl;
 		}
+		delete con;
+		delete res;
+		delete pstmt;
+	}
+	catch (sql::SQLException &e) {
+		cout << "# ERR: SQLException in " << __FILE__;
+		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+		cout << "# ERR: " << e.what();
+		cout << " (MySQL error code: " << e.getErrorCode();
+		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+	}
+
+}
+void Q7(string userName, string password) {
+	try {
+		sql::ResultSet *res;
+		sql::PreparedStatement *pstmt;
+		sql::Connection *con;
+		con = getcon(userName, password);
+
+		string s;
+		cout << "Enter the book you wish to check" << endl;
+		cin >> s;
+		pstmt = con->prepareStatement("SELECT book_name FROM stock where book_name = ?");
+		pstmt->setString(1, s);
+		pstmt->executeUpdate();
+		res = pstmt->executeQuery();
+		if (res->first())
+			cout << "The book: " << res->getString(1) << " is in stock" << endl;
+		else
+			cout << "The book: " << s << " is not in stock" << endl;
 		delete con;
 		delete res;
 		delete pstmt;

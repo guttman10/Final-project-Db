@@ -77,5 +77,4 @@ void setupdb(string userName, string password) {
 		cout << " (MySQL error code: " << e.getErrorCode();
 		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
 	}
-	cout << endl;
 }
