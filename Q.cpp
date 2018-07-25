@@ -1,7 +1,6 @@
 #include "db.h"
 #include <stdlib.h>
 #include <iostream>
-#include "stdafx.h"
 #include "mysql_connection.h"
 #include <string>
 #include <cppconn/driver.h>
@@ -20,8 +19,8 @@ void Q1(string userName, string password) {
 	connection_properties["hostName"] = "tcp://127.0.0.1/";
 	connection_properties["port"] = 3306;
 	connection_properties["OPT_RECONNECT"] = true;
-	connection_properties["password"] = password;
-	connection_properties["userName"] = userName;
+	connection_properties["password"] = "38383838";
+	connection_properties["userName"] = "root";
 	sql::Statement *stmt;
 	sql::ResultSet *res;
 	sql::PreparedStatement *pstmt;

@@ -1,7 +1,6 @@
 #include "db.h"
 #include <stdlib.h>
 #include <iostream>
-#include "stdafx.h"
 #include "mysql_connection.h"
 #include <string>
 #include <cppconn/driver.h>
@@ -23,8 +22,8 @@ void setupdb(string userName, string password) {
 		connection_properties["hostName"] = "tcp://127.0.0.1/";
 		connection_properties["port"] = 3306;
 		connection_properties["OPT_RECONNECT"] = true;
-		connection_properties["password"] = password;
-		connection_properties["userName"] = userName;
+		connection_properties["password"] = "38383838";
+		connection_properties["userName"] = "root";
 		sql::Statement *stmt;
 		sql::ResultSet *res;
 		sql::PreparedStatement *pstmt;
@@ -39,7 +38,7 @@ void setupdb(string userName, string password) {
 		con->setSchema("book_store");
 		stmt->execute("DROP TABLE IF EXISTS stock");
 		stmt->execute("CREATE TABLE if not exists  stock (book_name varchar(20) primary key,quantity int,discount bool)");
-		stmt->execute("INSERT INTO stock values('GuttyStory', 3, 1), ('HTML5', 6, 0), ('Algebra', 8, 0), ('assa', 1, 0), ('sadas', 6, 0)");
+		stmt->execute("INSERT INTO stock values('GuttyStory', 3, 1), ('HTML5', 6, 0), ('Algebra', 8, 0), ('Fairy Tail', 1, 0), ('Bleach', 6, 0)");
 		stmt->execute("DROP TABLE IF EXISTS all_books");
 		stmt->execute(
 			"CREATE TABLE if not exists all_books(book_name varchar(20) unique,author_fname varchar(20),"
@@ -49,13 +48,13 @@ void setupdb(string userName, string password) {
 			"( 'GuttyStory', 'Omer', 'Guttman', 'Vjump', 30, 60),"
 			"('HTML5', 'Yonit', 'Rosho', 'Hod-Ami', 40, 50),"
 			"('Algebra', 'Beni', 'Goren', 'mathOfun', 80, 110),"
-			"('assa', 'Omer', 'Guttmen', 'Vjump', 30, 60),"
-			"('sadas', 'Homer', 'Guttmen', 'Vjump', 30, 60),"
-			"('Gflewjefwl', 'Tsomer', 'Guttmen', 'Vjump', 30, 60),"
-			"('fwjknkwfe', 'Chlomer', 'Guttmen', 'Vjump', 30, 60),"
-			"('wflekwefm', 'Blomer', 'Guttmen', 'Vjump', 30, 60),"
-			"('nfwkjnwef', 'Stomer', 'Guttmen', 'Vjump', 30, 60),"
-			"('fwnwef', 'Fomer', 'Guttmen', 'Vjump', 30, 60);"
+			"('Fairy Tail', 'Malcolm', 'Howe', 'BK-fun', 50, 60),"
+			"('Bleach', 'Jadine', 'Gray', 'Konda', 10, 20),"
+			"('One Piece', 'Arla', 'Conway', 'Monda', 20, 40),"
+			"('Death Note', 'Teagan', 'Griffin', 'Hoshima', 80, 160),"
+			"('All my sons', 'Rabia', 'Goldsmith', 'Kadosh', 200, 350),"
+			"('HOT', 'Stomer', 'Mitchell', 'Kovalovsky', 10, 15),"
+			"('Yes', 'Fomer', 'Safah', 'Cohen books', 50, 100);"
 		);
 		delete stmt;
 		delete con;

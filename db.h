@@ -1,10 +1,8 @@
 #pragma once
 #include <stdlib.h>
 #include <iostream>
-#include "stdafx.h"
 #include "mysql_connection.h"
 #include <string>
-
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
