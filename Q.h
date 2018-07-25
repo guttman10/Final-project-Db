@@ -13,3 +13,6 @@
 using namespace std;
 
 void Q1(string userName, string password);
+void Q2(string userName, string password);
+void Q3(string userName, string password);
+void Q4(string userName, string password);
