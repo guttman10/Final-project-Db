@@ -10,7 +10,7 @@
 #include <cppconn/prepared_statement.h>
 #include <boost/tokenizer.hpp>
 using namespace std;
-void Q1(string userName, string password) {
+sql::Connection * getcon(string userName, string password) {
 	sql::Driver *driver;
 	sql::Connection *con;
 	sql::ConnectOptionsMap connection_properties;
@@ -20,12 +20,18 @@ void Q1(string userName, string password) {
 	connection_properties["OPT_RECONNECT"] = true;
 	connection_properties["password"] = password;
 	connection_properties["userName"] = userName;
-	sql::Statement *stmt;
-	sql::ResultSet *res;
-	sql::PreparedStatement *pstmt;
 	driver = get_driver_instance();
 	con = driver->connect(connection_properties);
 	con->setSchema("book_store");
+	return con;
+}
+void Q1(string userName, string password) {
+
+	sql::ResultSet *res;
+	sql::PreparedStatement *pstmt;
+	sql::Connection *con;
+	con = getcon(userName, password);
+	
 	
 	pstmt = con->prepareStatement("SELECT s.book_name FROM all_books b INNER JOIN stock s ON b.book_name = s.book_name");
 	cout << "the following books are in stock" << endl;
@@ -39,21 +45,11 @@ void Q1(string userName, string password) {
 
 }
 void Q2(string userName, string password) {
-	sql::Driver *driver;
-	sql::Connection *con;
-	sql::ConnectOptionsMap connection_properties;
-
-	connection_properties["hostName"] = "tcp://127.0.0.1/";
-	connection_properties["port"] = 3306;
-	connection_properties["OPT_RECONNECT"] = true;
-	connection_properties["password"] = password;
-	connection_properties["userName"] = userName;
-	sql::Statement *stmt;
 	sql::ResultSet *res;
 	sql::PreparedStatement *pstmt;
-	driver = get_driver_instance();
-	con = driver->connect(connection_properties);
-	con->setSchema("book_store");
+	sql::Connection *con;
+	con = getcon(userName, password);
+
 
 	pstmt = con->prepareStatement("SELECT * FROM orders");
 	cout << "These are the following active orders" << endl;
@@ -66,21 +62,11 @@ void Q2(string userName, string password) {
 
 }
 void Q3(string userName, string password) {
-	sql::Driver *driver;
-	sql::Connection *con;
-	sql::ConnectOptionsMap connection_properties;
-
-	connection_properties["hostName"] = "tcp://127.0.0.1/";
-	connection_properties["port"] = 3306;
-	connection_properties["OPT_RECONNECT"] = true;
-	connection_properties["password"] = password;
-	connection_properties["userName"] = userName;
-	sql::Statement *stmt;
 	sql::ResultSet *res;
 	sql::PreparedStatement *pstmt;
-	driver = get_driver_instance();
-	con = driver->connect(connection_properties);
-	con->setSchema("book_store");
+	sql::Connection *con;
+	con = getcon(userName, password);
+
 	pstmt = con->prepareStatement("SELECT * FROM customers");
 	res = pstmt->executeQuery();
 	cout << "These are the store customers" << endl;
@@ -92,27 +78,18 @@ void Q3(string userName, string password) {
 
 }
 void Q4(string userName, string password) {
-	sql::Driver *driver;
-	sql::Connection *con;
-	sql::ConnectOptionsMap connection_properties;
-
-	connection_properties["hostName"] = "tcp://127.0.0.1/";
-	connection_properties["port"] = 3306;
-	connection_properties["OPT_RECONNECT"] = true;
-	connection_properties["password"] = password;
-	connection_properties["userName"] = userName;
-	sql::Statement *stmt;
 	sql::ResultSet *res;
 	sql::PreparedStatement *pstmt;
-	driver = get_driver_instance();
-	con = driver->connect(connection_properties);
-	con->setSchema("book_store");
+	sql::Connection *con;
+	con = getcon(userName, password);
+
 	pstmt = con->prepareStatement("SELECT * FROM providers");
 	res = pstmt->executeQuery();
 	cout << "These are the store providers" << endl;
 	while (res->next())
-		cout << "Name: " << res->getString(1) << endl;
+		cout << res->getString(1) << endl;
 	delete con;
 	delete res;
 	delete pstmt;
 }
+void Q6(string userName, string password) {}
