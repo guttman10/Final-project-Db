@@ -22,8 +22,8 @@ void setupdb(string userName, string password) {
 		connection_properties["hostName"] = "tcp://127.0.0.1/";
 		connection_properties["port"] = 3306;
 		connection_properties["OPT_RECONNECT"] = true;
-		connection_properties["password"] = "38383838";
-		connection_properties["userName"] = "root";
+		connection_properties["password"] = password;
+		connection_properties["userName"] = userName;
 		sql::Statement *stmt;
 		sql::ResultSet *res;
 		sql::PreparedStatement *pstmt;
@@ -56,6 +56,9 @@ void setupdb(string userName, string password) {
 			"('HOT', 'Stomer', 'Mitchell', 'Kovalovsky', 10, 15),"
 			"('Yes', 'Fomer', 'Safah', 'Cohen books', 50, 100);"
 		);
+		stmt->execute("DROP TABLE IF EXISTS orders");
+		stmt->execute("CREATE TABLE if not exists orders (book_name varchar(20),buyer_id int unique,amount int, status varchar(20))");
+		stmt->execute("INSERT INTO orders values('GuttyStory', 1, 3, 'shipped'), ('HTML5',2, 2, 'processing'), ('Algebra', 3, 3, 'canceled')");
 		delete stmt;
 		delete con;
 

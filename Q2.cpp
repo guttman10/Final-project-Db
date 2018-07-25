@@ -10,7 +10,7 @@
 #include <cppconn/prepared_statement.h>
 #include <boost/tokenizer.hpp>
 using namespace std;
-void Q1(string userName, string password) {
+void Q2(string userName, string password) {
 	sql::Driver *driver;
 	sql::Connection *con;
 	sql::ConnectOptionsMap connection_properties;
@@ -26,13 +26,12 @@ void Q1(string userName, string password) {
 	driver = get_driver_instance();
 	con = driver->connect(connection_properties);
 	con->setSchema("book_store");
-	
-	pstmt = con->prepareStatement("SELECT s.book_name FROM all_books b INNER JOIN stock s ON b.book_name = s.book_name");
-	cout << "the following books are in stock" << endl;
+
+	pstmt = con->prepareStatement("SELECT * FROM orders");
+	cout << "These are the following active orders" << endl;
 	res = pstmt->executeQuery();
 	while (res->next())
-		cout<<endl<<"book name: "<<res->getString(1) << endl;
-
+		cout << endl << "book name: " << res->getString(1) << "Buyer ID: " << res->getInt(2) <<" "<< "Amount: " << res->getInt(3)<< " " << "Status: " << res->getString(4) << endl;
 	delete con;
 	delete res;
 	delete pstmt;
