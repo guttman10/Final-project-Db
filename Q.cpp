@@ -37,7 +37,7 @@ void Q1(string userName, string password) {
 	cout << "the following books are in stock" << endl;
 	res = pstmt->executeQuery();
 	while (res->next())
-		cout<<endl<<"book name: "<<res->getString(1) << endl;
+		cout<<"book name: "<<res->getString(1) << endl;
 
 	delete con;
 	delete res;
@@ -92,4 +92,29 @@ void Q4(string userName, string password) {
 	delete res;
 	delete pstmt;
 }
-void Q6(string userName, string password) {}
+void Q6(string userName, string password) {
+	try {
+		sql::ResultSet *res;
+		sql::PreparedStatement *pstmt;
+		sql::Connection *con;
+		con = getcon(userName, password);
+
+		pstmt = con->prepareStatement("SELECT s.book_name,price_bought FROM all_books b INNER JOIN stock s ON b.book_name = s.book_name AND s.discount = 1");
+		res = pstmt->executeQuery();
+		while (res->next()) {
+			int p = res->getInt(2)*1.1; 
+			cout << "Book Name: " <<res->getString(1) << " Price before discount: "<<p<<"Price after discount: "<< res->getInt(2) << endl;
+		}
+		delete con;
+		delete res;
+		delete pstmt;
+	}
+	catch (sql::SQLException &e) {
+		cout << "# ERR: SQLException in " << __FILE__;
+		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+		cout << "# ERR: " << e.what();
+		cout << " (MySQL error code: " << e.getErrorCode();
+		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+	}
+
+}
