@@ -92,6 +92,34 @@ void Q4(string userName, string password) {
 	delete res;
 	delete pstmt;
 }
+
+void Q5(string userName, string password) {
+	sql::ResultSet *res;
+	sql::PreparedStatement *pstmt;
+	sql::Connection *con;
+	con = getcon(userName, password);
+	string start;
+	string finish;
+	string temp;
+	cout << "Insert starting date yyyy/mm/dd: ";
+	cin >> start;
+	cout << "Insert ending date yyyy/mm/dd: ";
+	cin >> finish;
+
+	pstmt = con->prepareStatement("SELECT * FROM previous_purchases");
+	res = pstmt->executeQuery();
+	cout << "These are all the purchases from the selected dates:" << endl;
+	while (res->next())
+	{
+		string temp = res->getString(5);
+		if ((start <= temp) && (temp <= finish))
+			cout << "Book Name: " << res->getString(1) << "employee ID: " << res->getString(2) << " " << "Buyer ID: " << res->getString(3) << " " << "Amount: " << res->getString(4) << " " << "Date: " << res->getString(5) << endl;
+	}
+	delete con;
+	delete res;
+	delete pstmt;
+}
+
 void Q6(string userName, string password) {
 	try {
 		sql::ResultSet *res;
