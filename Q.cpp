@@ -154,8 +154,9 @@ void Q7(string userName, string password) {
 		con = getcon(userName, password);
 
 		string s;
+		getchar();
 		cout << "Enter the book you wish to check" << endl;
-		cin >> s;
+		getline(cin, s);
 		pstmt = con->prepareStatement("SELECT book_name FROM stock where book_name = ?");
 		pstmt->setString(1, s);
 		pstmt->executeUpdate();
@@ -183,10 +184,10 @@ void Q8(string userName, string password) {
 		sql::PreparedStatement *pstmt;
 		sql::Connection *con;
 		con = getcon(userName, password);
-
 		string s;
+		getchar();
 		cout << "Enter the book you wish to check" << endl;
-		cin >> s;
+		getline(cin, s);
 		pstmt = con->prepareStatement("SELECT * FROM all_books");
 		res = pstmt->executeQuery();
 		while (res->next())
@@ -216,3 +217,42 @@ void Q8(string userName, string password) {
 	}
 
 }
+void Q9(string userName, string password) {
+	try {
+		sql::ResultSet *res;
+		sql::PreparedStatement *pstmt;
+		sql::Connection *con;
+		con = getcon(userName, password);
+
+		string name;
+		string date;
+		string tempName;
+		string tempDate;
+		int counter = 0;
+		getchar();
+		cout << "Enter the book you wish to check: ";
+		getline(cin, name);
+		cout << "Enter the Date (yyyy/mm/dd): ";
+		cin >> date;
+		pstmt = con->prepareStatement("SELECT * FROM previous_purchases");
+		res = pstmt->executeQuery();
+		while (res->next())
+		{
+			tempName = res->getString(1);
+			tempDate = res->getString(5);
+			if ((tempDate >= date) && (name == tempName))
+				counter++;
+		}
+		cout << "The numbers of copies of this book is :" << counter << endl;
+		delete con;
+		delete res;
+		delete pstmt;
+	}
+	catch (sql::SQLException &e) {
+		cout << "# ERR: SQLException in " << __FILE__;
+		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+		cout << "# ERR: " << e.what();
+		cout << " (MySQL error code: " << e.getErrorCode();
+		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+	}
+	}
