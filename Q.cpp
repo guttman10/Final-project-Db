@@ -177,3 +177,42 @@ void Q7(string userName, string password) {
 	}
 
 }
+void Q8(string userName, string password) {
+	try {
+		sql::ResultSet *res;
+		sql::PreparedStatement *pstmt;
+		sql::Connection *con;
+		con = getcon(userName, password);
+
+		string s;
+		cout << "Enter the book you wish to check" << endl;
+		cin >> s;
+		pstmt = con->prepareStatement("SELECT * FROM all_books");
+		res = pstmt->executeQuery();
+		while (res->next())
+		{
+			string temp = res->getString(1);
+			if (temp == s)
+			{
+				cout << "These are the providers of the book:" << endl << "Providers: " << res->getString(4) << endl;
+				break;
+			}
+			else
+			{
+				cout << "There's no book with this name" << endl;
+				break;
+			}
+		}
+		delete con;
+		delete res;
+		delete pstmt;
+	}
+	catch (sql::SQLException &e) {
+		cout << "# ERR: SQLException in " << __FILE__;
+		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+		cout << "# ERR: " << e.what();
+		cout << " (MySQL error code: " << e.getErrorCode();
+		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+	}
+
+}
