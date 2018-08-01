@@ -189,14 +189,15 @@ void Q8(string userName, string password) {
 		getchar();
 		cout << "Enter the book you wish to check" << endl;
 		getline(cin, s);
-		pstmt = con->prepareStatement("SELECT provider_name FROM all_books where book_name");
+		pstmt = con->prepareStatement("SELECT provider_name FROM all_books where book_name = ? ");
 		pstmt->setString(1, s);
 		pstmt->executeUpdate();
 		res = pstmt->executeQuery();
+		cout << "These are the book: " << s << " provirders" << endl;
 		if (res->first())
-			cout << "The book: " << res->getString(1) << " is in stock" << endl;
+			cout << res->getString(1) << endl;
 		else
-			cout << "The book: " << s << " is not in stock" << endl;
+			cout << "The book: " << s << " does not exists" << endl;
 		delete con;
 		delete res;
 		delete pstmt;
