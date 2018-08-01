@@ -228,16 +228,15 @@ void Q9(string userName, string password) {
 		getline(cin, name);
 		cout << "Enter the Date (yyyy/mm/dd): ";
 		cin >> date;
-		pstmt = con->prepareStatement("SELECT * FROM previous_purchases");
+		pstmt = con->prepareStatement("SELECT amount FROM previous_purchases_c where date_sold >= ? and book_name = ?");
+		pstmt->setString(1, date);
+		pstmt->setString(2, name);
 		res = pstmt->executeQuery();
-		while (res->next())
-		{
-			tempName = res->getString(1);
-			tempDate = res->getString(5);
-			if ((tempDate >= date) && (name == tempName))
-				counter++;
-		}
-		cout << "The numbers of copies of this book is :" << counter << endl;
+		cout << "These are the book: " << name << " amount" << endl;
+		if (res->first())
+			cout << res->getString(1) << endl;
+		else
+			cout << "The book: " << name << " does not exists or there was no purchase from the date you entered" << endl;
 		delete con;
 		delete res;
 		delete pstmt;
