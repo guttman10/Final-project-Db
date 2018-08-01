@@ -378,3 +378,30 @@ void Q12(string userName, string password) {
 	delete res;
 	delete pstmt;
 }
+void Q14(string userName, string password) {
+	sql::ResultSet *res;
+	sql::PreparedStatement *pstmt;
+	sql::Connection *con;
+	con = getcon(userName, password);
+	string date1, date2;
+	cout << "Enter the starting Date (yyyy/mm/dd): ";
+	cin >> date1;
+	cout << "Enter the end Date (yyyy/mm/dd): ";
+	cin >> date2;
+	pstmt = con->prepareStatement("SELECT * FROM previous_purchases_c where date_sold between ? and ?");
+	pstmt->setString(1, date1);
+	pstmt->setString(2, date2);
+	pstmt->executeUpdate();
+	res = pstmt->executeQuery();
+	cout << "Those are the sale between " << date1 << " and " << date2 << endl;
+	if (!res->first()) {
+		cout << "No purcheses were made in those dates" << endl;
+		return;
+	}
+	while (res->next()) {
+		cout << "Book name: " << res->getString(1) <<" amount:  " <<res->getInt(4)<<" date sold: "<< res->getString(5) << endl;
+	}
+	delete con;
+	delete res;
+	delete pstmt;
+}
