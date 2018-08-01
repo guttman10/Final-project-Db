@@ -248,6 +248,43 @@ void Q9(string userName, string password) {
 		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
 	}
 	}
+void Q10(string userName, string password) {
+	try {
+		sql::ResultSet *res;
+		sql::PreparedStatement *pstmt;
+		sql::Connection *con;
+		con = getcon(userName, password);
+
+		int id;
+		string date;
+		string tempName;
+		string tempDate;
+		int counter = 0;
+		getchar();
+		cout << "Enter the customer id : ";
+		cin >> id;
+		cout << "Enter the Date (yyyy/mm/dd): ";
+		cin >> date;
+		pstmt = con->prepareStatement("SELECT amount FROM previous_purchases_c where date_sold >= ? and buyer_id = ?");
+		pstmt->setString(1, date);
+		pstmt->setInt(2, id);
+		res = pstmt->executeQuery();
+		cout << "These are the amount of customer: " << id << endl;
+		while (res->next())
+			counter += res->getInt(1);
+		cout << "The amount is:" << counter;
+		delete con;
+		delete res;
+		delete pstmt;
+	}
+	catch (sql::SQLException &e) {
+		cout << "# ERR: SQLException in " << __FILE__;
+		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+		cout << "# ERR: " << e.what();
+		cout << " (MySQL error code: " << e.getErrorCode();
+		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+	}
+}
 void Q12(string userName, string password) {
 	sql::ResultSet *res, *res2;
 	sql::PreparedStatement *pstmt;
