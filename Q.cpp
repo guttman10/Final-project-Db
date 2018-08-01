@@ -249,3 +249,36 @@ void Q9(string userName, string password) {
 		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
 	}
 	}
+void Q12(string userName, string password) {
+	sql::ResultSet *res, *res2;
+	sql::PreparedStatement *pstmt;
+	sql::Connection *con;
+	con = getcon(userName, password);
+	string date;
+	string Pname,maxPname;
+	int sum=0, t = 0;
+	cout << "Enter the Date (yyyy/mm/dd): ";
+	cin >> date;
+	pstmt = con->prepareStatement("SELECT * FROM providers");
+	res = pstmt->executeQuery();
+	while (res->next()) {
+		Pname = res->getString(1);
+		pstmt = con->prepareStatement("SELECT amount FROM previous_purchases_s where provider_name = ? and date_sold >= ?");
+		pstmt->setString(1, Pname);
+		pstmt->setString(2, date);
+		pstmt->executeUpdate();
+		res2 = pstmt->executeQuery();
+		while (res2->next()) {
+			t += res2->getInt(1);
+		}
+		if (t > sum) {
+			sum = t;
+			maxPname = Pname;
+		}
+	}
+	if (!res->first()) {
+		cout << "No purcheses were made after this date" << endl;
+		return;
+	}
+	cout << "The supplier: " << maxPname << " has the most purches from the date: " << date << " and onwards with " << sum << " books." << endl;
+}

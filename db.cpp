@@ -65,13 +65,13 @@ void setupdb(string userName, string password) {
 			"(3, 'Daniel Kovalevski', '1998/06/03'),(4, 'Tomer LoSMASH', '2018/04/19');");
 		stmt->execute("DROP TABLE IF EXISTS providers");
 		stmt->execute("CREATE TABLE if not exists providers (name varchar(20) unique)");
-		stmt->execute("INSERT INTO providers VALUE('Hod-Ami'), ('Vjump'), ('mathOfun');");
+		stmt->execute("INSERT INTO providers VALUE('Hod-Ami'), ('Vjump'), ('mathOfun'), ('BK-fun'), ('Kadosh');");
 		stmt->execute("DROP TABLE IF EXISTS previous_purchases_c");
 		stmt->execute("CREATE TABLE if not exists previous_purchases_c (book_name varchar(20), employee_id int unique,buyer_id int unique, amount int, date_sold date)");
 		stmt->execute("INSERT INTO previous_purchases_c VALUES('Fairy Tail',1,1,3,'2017/03/25'),('All my sons',2,2,1,'2013/05/18');");
 		stmt->execute("DROP TABLE IF EXISTS previous_purchases_s");
 		stmt->execute("CREATE TABLE if not exists previous_purchases_s (book_name varchar(20), provider_name varchar(20), amount int, date_sold date)");
-		stmt->execute("INSERT INTO previous_purchases_s VALUES('Fairy Tail','BK-fun',3,'2017/03/25'),('All my sons','Kadosh',1,'2013/05/18');");
+		stmt->execute("INSERT INTO previous_purchases_s VALUES('Fairy Tail','BK-fun',3,'2017/03/25'),('All my sons','Kadosh',5,'2013/05/18');");
 
 		delete stmt;
 		delete con;
