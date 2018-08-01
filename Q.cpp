@@ -358,10 +358,7 @@ void Q12(string userName, string password) {
 		pstmt->executeUpdate();
 		sql::ResultSet *res2 = pstmt->executeQuery();
 		t = 0;
-		if (!res2->first()) {
-		cout << "No purcheses were made after this date" << endl;
-		return;
-			}
+		
 		while (res2->next()) {
 			t += res2->getInt(1);
 		}
@@ -370,6 +367,10 @@ void Q12(string userName, string password) {
 			maxPname = Pname;
 		}
 		delete res2;
+	}
+	if (t == 0) {
+		cout << "No purcheses were made after this date" << endl;
+		return;
 	}
 	cout << "The supplier: " << maxPname << " is the most purchesd from the date: " << date << " and onwards with " << sum << " books." << endl;
 
