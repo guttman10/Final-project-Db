@@ -275,10 +275,10 @@ void Q12(string userName, string password) {
 			sum = t;
 			maxPname = Pname;
 		}
-	}
-	if (!res->first()) {
+	if (!res2->first()) {
 		cout << "No purcheses were made after this date" << endl;
 		return;
+	}
 	}
 	cout << "The supplier: " << maxPname << " has the most purches from the date: " << date << " and onwards with " << sum << " books." << endl;
 }
