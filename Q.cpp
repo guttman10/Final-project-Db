@@ -378,6 +378,41 @@ void Q12(string userName, string password) {
 	delete res;
 	delete pstmt;
 }
+void Q13(string userName, string password) {
+	try {
+		sql::ResultSet *res;
+		sql::PreparedStatement *pstmt;
+		sql::Connection *con;
+		con = getcon(userName, password);
+
+		int id;
+		string Sdate;
+		string Edate;
+		int counter = 0;
+		getchar();
+		cout << "Enter the start Date (yyyy/mm/dd): ";
+		getline(cin, Sdate);
+		cout << "Enter the start Date (yyyy/mm/dd): ";
+		getline(cin, Edate);
+		pstmt = con->prepareStatement("SELECT * FROM orders where date_order BETWEEN ? and ?");
+		pstmt->setString(1, Sdate);
+		pstmt->setString(2, Edate);
+		res = pstmt->executeQuery();
+		while (res->next())
+			counter++;
+		cout << "The number of orders is:" << counter;
+		delete con;
+		delete res;
+		delete pstmt;
+	}
+	catch (sql::SQLException &e) {
+		cout << "# ERR: SQLException in " << __FILE__;
+		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+		cout << "# ERR: " << e.what();
+		cout << " (MySQL error code: " << e.getErrorCode();
+		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+	}
+}
 void Q14(string userName, string password) {
 	sql::ResultSet *res;
 	sql::PreparedStatement *pstmt;
