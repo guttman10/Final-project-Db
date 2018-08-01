@@ -248,42 +248,53 @@ void Q9(string userName, string password) {
 		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
 	}
 	}
-void Q10(string userName, string password) {
-	try {
-		sql::ResultSet *res;
-		sql::PreparedStatement *pstmt;
-		sql::Connection *con;
-		con = getcon(userName, password);
+void Q11(string userName, string password) {
+	sql::ResultSet *res, *res2;
+	sql::PreparedStatement *pstmt;
+	sql::Connection *con;
+	con = getcon(userName, password);
+	string date;
+	int id, tid;
+	int sum = 0, t = 0;
+	cout << "Enter the Date (yyyy/mm/dd): ";
+	cin >> date;
+	pstmt = con->prepareStatement("SELECT * FROM customers");
+	res = pstmt->executeQuery();
+	while (res->next()) {
+		tid = res->getInt(1);
+		pstmt = con->prepareStatement("SELECT * FROM previous_purchases_c where buyer_id = ? and date_sold >= ?");
+		pstmt->setInt(1, tid);
+		pstmt->setString(2, date);
+		pstmt->executeUpdate();
+		res2 = pstmt->executeQuery();
+		t = 0;
+		if (!res2->first()) {
+			cout << "No purcheses were made after this date" << endl;
+			return;
+		}
+		while (res2->next()) {
+			t += res2->getInt(1);
+			cout << res2->getString(1) <<" "<< res2->getString(2) << " " << res2->getString(3) << " " << res2->getString(4) << " " << res2->getString(5) << endl;
+		}
+		if (t > sum) {
+			sum = t;
+			id = tid;
+		}
+	}
+		pstmt = con->prepareStatement("SELECT * FROM customers where buyer_id= ?");
+		pstmt->setInt(1, id);
+		pstmt->executeUpdate();
+		res= pstmt->executeQuery();
+		if (res->first()) {
+			cout << "The customer: " << res->getString(2) << " ID: " << id << " who joined in: " << res->getString(3) << " has purchesed the most books as of " << date<<endl
+			<< "With a total of: "<<sum<< " purcheses"<< endl;
+		}
+		else
+			cout << "Something went worng" << endl;
 
-		int id;
-		string date;
-		string tempName;
-		string tempDate;
-		int counter = 0;
-		getchar();
-		cout << "Enter the customer id : ";
-		cin >> id;
-		cout << "Enter the Date (yyyy/mm/dd): ";
-		cin >> date;
-		pstmt = con->prepareStatement("SELECT amount FROM previous_purchases_c where date_sold >= ? and buyer_id = ?");
-		pstmt->setString(1, date);
-		pstmt->setInt(2, id);
-		res = pstmt->executeQuery();
-		cout << "These are the amount of customer: " << id << endl;
-		while (res->next())
-			counter += res->getInt(1);
-		cout << "The amount is:" << counter;
 		delete con;
 		delete res;
 		delete pstmt;
-	}
-	catch (sql::SQLException &e) {
-		cout << "# ERR: SQLException in " << __FILE__;
-		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
-		cout << "# ERR: " << e.what();
-		cout << " (MySQL error code: " << e.getErrorCode();
-		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
-	}
 }
 void Q12(string userName, string password) {
 	sql::ResultSet *res, *res2;
@@ -304,6 +315,11 @@ void Q12(string userName, string password) {
 		pstmt->setString(2, date);
 		pstmt->executeUpdate();
 		res2 = pstmt->executeQuery();
+		t = 0;
+		if (!res2->first()) {
+		cout << "No purcheses were made after this date" << endl;
+		return;
+			}
 		while (res2->next()) {
 			t += res2->getInt(1);
 		}
@@ -311,10 +327,10 @@ void Q12(string userName, string password) {
 			sum = t;
 			maxPname = Pname;
 		}
-	if (!res2->first()) {
-		cout << "No purcheses were made after this date" << endl;
-		return;
 	}
-	}
-	cout << "The supplier: " << maxPname << " has the most purches from the date: " << date << " and onwards with " << sum << " books." << endl;
+	cout << "The supplier: " << maxPname << " is the most purchesd from the date: " << date << " and onwards with " << sum << " books." << endl;
+
+	delete con;
+	delete res;
+	delete pstmt;
 }
