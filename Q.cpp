@@ -71,7 +71,7 @@ void Q3(string userName, string password) {
 	res = pstmt->executeQuery();
 	cout << "These are the store customers" << endl;
 	while (res->next())
-		cout << "Customer ID: " << res->getInt(1) << " Full Name: " << res->getString(2) << " " << " Date Joined: " << res->getString(3) << endl;
+		cout << "Customer ID: " << res->getInt("buyer_id") << " Full Name: " << res->getString("buyer_name") << " " << " Date Joined: " << res->getString("date_joined") << endl;
 	delete con;
 	delete res;
 	delete pstmt;
@@ -87,7 +87,7 @@ void Q4(string userName, string password) {
 	res = pstmt->executeQuery();
 	cout << "These are the store providers" << endl;
 	while (res->next())
-		cout << res->getString(1) << endl;
+		cout << res->getString("name") << endl;
 	delete con;
 	delete res;
 	delete pstmt;
@@ -113,7 +113,7 @@ void Q5(string userName, string password) {
 	{
 		string temp = res->getString(4);
 		if ((start <= temp) && (temp <= finish))
-			cout << "Book Name: " << res->getString(1) << "Provider name: "<< " " << res->getString(2) << " " << "amount: " << res->getInt(3) << " " << "Date: " << res->getString(4) << endl;
+			cout << "Book Name: " << res->getString("book_name") << "Provider name: "<< " " << res->getString("provider_name") << " " << "amount: " << res->getInt("amount") << " " << "Date: " << res->getString("date_sold") << endl;
 	}
 	delete con;
 	delete res;
