@@ -37,7 +37,7 @@ void Q1(string userName, string password) {
 	cout << "the following books are in stock" << endl;
 	res = pstmt->executeQuery();
 	while (res->next())
-		cout<<"book name: "<<res->getString(1) << endl;
+		cout<<"book name: "<<res->getString("book_name") << endl;
 
 	delete con;
 	delete res;
@@ -51,11 +51,11 @@ void Q2(string userName, string password) {
 	con = getcon(userName, password);
 
 
-	pstmt = con->prepareStatement("SELECT * FROM orders");
+	pstmt = con->prepareStatement("SELECT * FROM orders where status = 'processing' ");
 	cout << "These are the following active orders" << endl;
 	res = pstmt->executeQuery();
 	while (res->next())
-		cout << endl << "book name: " << res->getString(1) << " Buyer ID: " << res->getInt(2) << " " << " Amount: " << res->getInt(3)<< " Status: " << res->getString(4) << endl;
+		cout << endl << "book name: " << res->getString("book_name") << " Buyer ID: " << res->getInt("buyer_id") << " " << " Amount: " << res->getInt("amount")<< " Status: " << res->getString("status") << endl;
 	delete con;
 	delete res;
 	delete pstmt;
