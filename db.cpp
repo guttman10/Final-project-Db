@@ -57,8 +57,8 @@ void setupdb(string userName, string password) {
 			"('Yes', 'Fomer', 'Safah', 'Cohen books', 50, 100);"
 		);
 		stmt->execute("DROP TABLE IF EXISTS orders");
-		stmt->execute("CREATE TABLE if not exists orders (book_name varchar(20),buyer_id int unique,amount int, status varchar(20))");
-		stmt->execute("INSERT INTO orders values('GuttyStory', 1, 3, 'shipped'), ('HTML5',2, 2, 'processing'), ('Algebra', 3, 3, 'canceled')");
+		stmt->execute("CREATE TABLE if not exists orders (book_name varchar(20),buyer_id int unique,amount int, status varchar(20), date_order date )");
+		stmt->execute("INSERT INTO orders values('GuttyStory', 1, 3, 'shipped','2007/05/08'), ('HTML5',2, 2, 'processing','2004/05/08'), ('Algebra', 3, 3, 'canceled','2005/05/08')");
 		stmt->execute("DROP TABLE IF EXISTS customers");
 		stmt->execute("CREATE TABLE if not exists customers(buyer_id int unique,buyer_name varchar(20),date_joined date);");
 		stmt->execute("INSERT INTO customers VALUES(1, 'Ofir Cohen', '2000/01/13'),(2, 'Omer Guttman', '2010/03/09'),"
