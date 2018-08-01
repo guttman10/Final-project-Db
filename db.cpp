@@ -57,8 +57,8 @@ void setupdb(string userName, string password) {
 			"('Yes', 'Fomer', 'Safah', 'Cohen books', 50, 100);"
 		);
 		stmt->execute("DROP TABLE IF EXISTS orders");
-		stmt->execute("CREATE TABLE if not exists orders (book_name varchar(20),buyer_id int unique,amount int, status varchar(20), date_order date )");
-		stmt->execute("INSERT INTO orders values('GuttyStory', 1, 3, 'shipped','2007/05/08'), ('HTML5',2, 2, 'processing','2004/05/08'), ('Algebra', 3, 3, 'canceled','2005/05/08')");
+		stmt->execute("CREATE TABLE if not exists orders (book_name varchar(20),buyer_id int,employee_id int ,amount int, status varchar(20), date_order date )");
+		stmt->execute("INSERT INTO orders values('Fairy Tail', 1, 1, 3, 'shipped','2017/03/25'),('All my sons',2,2,5, 'shipped','2013/05/18'),('Fairy Tail',3,3,9, 'shipped','2011/03/14') ,('GuttyStory',4,4,8, 'shipped','2016/05/04'), ('HTML5',2, 2,2, 'processing','2004/05/08'), ('Algebra', 3, 3,1, 'canceled','2005/05/08')");
 		stmt->execute("DROP TABLE IF EXISTS customers");
 		stmt->execute("CREATE TABLE if not exists customers(buyer_id int unique,buyer_name varchar(20),date_joined date);");
 		stmt->execute("INSERT INTO customers VALUES(1, 'Ofir Cohen', '2000/01/13'),(2, 'Omer Guttman', '2010/03/09'),"
@@ -68,7 +68,7 @@ void setupdb(string userName, string password) {
 		stmt->execute("INSERT INTO providers VALUE('Hod-Ami'), ('Vjump'), ('mathOfun'), ('BK-fun'), ('Kadosh');");
 		stmt->execute("DROP TABLE IF EXISTS previous_purchases_c");
 		stmt->execute("CREATE TABLE if not exists previous_purchases_c (book_name varchar(20), employee_id int ,buyer_id int, amount int, date_sold date)");
-		stmt->execute("INSERT INTO previous_purchases_c VALUES('Fairy Tail',1,1,3,'2017/03/25'),('All my sons',2,2,1,'2013/05/18'),('Fairy Tail',3,3,4,'2011/03/14'),('GuttyStory',4,4,8,'2016/05/04');");
+		stmt->execute("INSERT INTO previous_purchases_c VALUES('Fairy Tail',1,1,3,'2017/03/25'),('All my sons',2,2,5,'2013/05/18'),('Fairy Tail',3,3,9,'2011/03/14'),('GuttyStory',4,4,8,'2016/05/04');");
 		stmt->execute("DROP TABLE IF EXISTS previous_purchases_s");
 		stmt->execute("CREATE TABLE if not exists previous_purchases_s (book_name varchar(20), provider_name varchar(20), amount int, date_sold date)");
 		stmt->execute("INSERT INTO previous_purchases_s VALUES('Fairy Tail','BK-fun',3,'2017/03/25'),('All my sons','Kadosh',5,'2013/05/18'),('Fairy Tail','BK-fun',9,'2011/03/14'),('GuttyStory','Vjump',8,'2015/05/04');");
