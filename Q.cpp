@@ -233,10 +233,9 @@ void Q9(string userName, string password) {
 		pstmt->setString(2, name);
 		res = pstmt->executeQuery();
 		cout << "These are the book: " << name << " amount" << endl;
-		if (res->first())
-			cout << res->getString(1) << endl;
-		else
-			cout << "The book: " << name << " does not exists or there was no purchase from the date you entered" << endl;
+		while (res->next())
+			counter += res->getInt(1);
+		cout << "The amount is:" << counter;
 		delete con;
 		delete res;
 		delete pstmt;
