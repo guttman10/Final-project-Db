@@ -184,26 +184,19 @@ void Q8(string userName, string password) {
 		sql::PreparedStatement *pstmt;
 		sql::Connection *con;
 		con = getcon(userName, password);
+
 		string s;
 		getchar();
 		cout << "Enter the book you wish to check" << endl;
 		getline(cin, s);
-		pstmt = con->prepareStatement("SELECT * FROM all_books");
+		pstmt = con->prepareStatement("SELECT provider_name FROM all_books where book_name");
+		pstmt->setString(1, s);
+		pstmt->executeUpdate();
 		res = pstmt->executeQuery();
-		while (res->next())
-		{
-			string temp = res->getString(1);
-			if (temp == s)
-			{
-				cout << "These are the providers of the book:" << endl << "Providers: " << res->getString(4) << endl;
-				break;
-			}
-			else
-			{
-				cout << "There's no book with this name" << endl;
-				break;
-			}
-		}
+		if (res->first())
+			cout << "The book: " << res->getString(1) << " is in stock" << endl;
+		else
+			cout << "The book: " << s << " is not in stock" << endl;
 		delete con;
 		delete res;
 		delete pstmt;
