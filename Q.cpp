@@ -106,15 +106,14 @@ void Q5(string userName, string password) {
 	cout << "Insert ending date yyyy/mm/dd: ";
 	cin >> finish;
 
-	pstmt = con->prepareStatement("SELECT * FROM previous_purchases_s");
+	pstmt = con->prepareStatement("SELECT * FROM previous_purchases_s where date_sold between ? and ?");
+	pstmt->setString(1, start);
+	pstmt->setString(2, finish);
+	pstmt->executeUpdate();
 	res = pstmt->executeQuery();
-	cout << "These are all the purchases from the selected dates:" << endl;
 	while (res->next())
-	{
-		string temp = res->getString(4);
-		if ((start <= temp) && (temp <= finish))
-			cout << "Book Name: " << res->getString("book_name") << "Provider name: "<< " " << res->getString("provider_name") << " " << "amount: " << res->getInt("amount") << " " << "Date: " << res->getString("date_sold") << endl;
-	}
+		cout << "Book Name: " << res->getString("book_name") <<" "<< "Provider name: "<< " " << res->getString("provider_name") << " " << "amount: " << res->getInt("amount") << " " << "Date: " << res->getString("date_sold") << endl;
+	
 	delete con;
 	delete res;
 	delete pstmt;
