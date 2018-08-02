@@ -128,8 +128,8 @@ void Q6(string userName, string password) {
 		pstmt = con->prepareStatement("SELECT s.book_name,price_bought FROM all_books b INNER JOIN stock s ON b.book_name = s.book_name AND s.discount = 1");
 		res = pstmt->executeQuery();
 		while (res->next()) {
-			int p = res->getInt(2)*1.1; 
-			cout << "Book Name: " <<res->getString(1) << " Price before discount: "<<p<<" Price after discount: "<< res->getInt(2) << endl;
+			int p = res->getInt("price_bought")*1.1; 
+			cout << "Book Name: " <<res->getString("book_name") << " Price before discount: "<<p<<" Price after discount: "<< res->getInt("price_bought") << endl;
 		}
 		delete con;
 		delete res;
@@ -153,14 +153,14 @@ void Q7(string userName, string password) {
 
 		string s;
 		getchar();
-		cout << "Enter the book you wish to check" << endl;
+		cout << "Enter the book you wish to check: ";
 		getline(cin, s);
 		pstmt = con->prepareStatement("SELECT book_name FROM stock where book_name = ?");
 		pstmt->setString(1, s);
 		pstmt->executeUpdate();
 		res = pstmt->executeQuery();
 		if (res->first())
-			cout << "The book: " << res->getString(1) << " is in stock" << endl;
+			cout << "The book: " << res->getString("book_name") << " is in stock" << endl;
 		else
 			cout << "The book: " << s << " is not in stock" << endl;
 		delete con;
@@ -185,15 +185,15 @@ void Q8(string userName, string password) {
 
 		string s;
 		getchar();
-		cout << "Enter the book you wish to check" << endl;
+		cout << "Enter the book you wish to check: ";
 		getline(cin, s);
 		pstmt = con->prepareStatement("SELECT provider_name FROM all_books where book_name = ? ");
 		pstmt->setString(1, s);
 		pstmt->executeUpdate();
 		res = pstmt->executeQuery();
-		cout << "These are the book: " << s << " provirders" << endl;
+		cout << "These are the book " << s << " providers" << endl;
 		if (res->first())
-			cout << res->getString(1) << endl;
+			cout << res->getString("provider_name") << endl;
 		else
 			cout << "The book: " << s << " does not exists" << endl;
 		delete con;
@@ -232,8 +232,8 @@ void Q9(string userName, string password) {
 		res = pstmt->executeQuery();
 		cout << "These are the book: " << name << " amount" << endl;
 		while (res->next())
-			counter += res->getInt(1);
-		cout << "The amount is:" << counter;
+			counter += res->getInt("amount");
+		cout << "The amount is: " << counter;
 		delete con;
 		delete res;
 		delete pstmt;
@@ -269,7 +269,7 @@ void Q10(string userName, string password) {
 		res = pstmt->executeQuery();
 		cout << "These are the amount of customer: " << id << endl;
 		while (res->next())
-			counter += res->getInt(1);
+			counter += res->getInt("amount");
 		cout << "The amount is:" << counter;
 		delete con;
 		delete res;
@@ -305,7 +305,7 @@ void Q11(string userName, string password) {
 			sql::ResultSet *res2 = pstmt->executeQuery();
 			t = 0;
 			while (res2->next()) {
-				t += res2->getInt(1);
+				t += res2->getInt("amount");
 			}
 			if (t > sum) {
 				sum = t;
@@ -318,8 +318,8 @@ void Q11(string userName, string password) {
 		pstmt->executeUpdate();
 		res3 = pstmt->executeQuery();
 		if (res3->first()) {
-			cout << "The customer: " << res3->getString(2) << " ID: " << id << " who joined in: " << res3->getString(3) << " has purchesed the most books as of " << date << endl
-				<< "With a total of: " << sum << " purcheses" << endl;
+			cout << "The customer: " << res3->getString("buyer_name") << " ID: " << id << " who joined in: " << res3->getString("date_joined") << " has purchesed the most books as of " << date << endl
+				<< "With a total of: " << sum << " purchases" << endl;
 			delete res3;
 		}
 		else
@@ -359,7 +359,7 @@ void Q12(string userName, string password) {
 		t = 0;
 		
 		while (res2->next()) {
-			t += res2->getInt(1);
+			t += res2->getInt("amount");
 		}
 		if (t > sum) {
 			sum = t;
@@ -433,7 +433,7 @@ void Q14(string userName, string password) {
 		return;
 	}
 	while (res->next()) {
-		cout << "Book name: " << res->getString(1) <<" amount:  " <<res->getInt(4)<<" date sold: "<< res->getString(5) << endl;
+		cout << "Book name: " << res->getString("book_name") <<" amount:  " <<res->getInt("amount")<<" date sold: "<< res->getString("date_sold") << endl;
 	}
 	delete con;
 	delete res;
