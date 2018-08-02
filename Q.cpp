@@ -439,3 +439,34 @@ void Q14(string userName, string password) {
 	delete res;
 	delete pstmt;
 }
+void Q17(string userName, string password) {
+	try {
+		sql::ResultSet *res;
+		sql::PreparedStatement *pstmt;
+		sql::Connection *con;
+		con = getcon(userName, password);
+
+		int id;
+		string date;
+		int counter = 0;
+		getchar();
+		cout << "Enter the Date (yyyy/mm/dd): ";
+		getline(cin, date);
+		pstmt = con->prepareStatement("SELECT * FROM customers where date_joined >= ?");
+		pstmt->setString(1, date);
+		res = pstmt->executeQuery();
+		while (res->next())
+			counter++;
+		cout << "The number of customers is: " << counter;
+		delete con;
+		delete res;
+		delete pstmt;
+	}
+	catch (sql::SQLException &e) {
+		cout << "# ERR: SQLException in " << __FILE__;
+		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+		cout << "# ERR: " << e.what();
+		cout << " (MySQL error code: " << e.getErrorCode();
+		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+	}
+}
