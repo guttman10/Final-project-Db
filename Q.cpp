@@ -481,6 +481,102 @@ void Q15(string userName, string password) {
 		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
 	}
 }
+void Q16(string userName, string password) {
+	try {
+		sql::ResultSet *res, *res2;
+		sql::PreparedStatement *pstmt;
+		sql::Connection *con;
+		con = getcon(userName, password);
+		int total = 0;
+		int amountemp = 0;
+		int q1 = 0, q2 = 0, q3 = 0, q4 = 0;
+		string bookN;
+		string date;
+		cout << "Type the year (yyyy): ";
+		getchar();
+		getline(cin, date);
+		string q1s = "/01/01";
+		string q1f = "/03/31";
+		string q2s = "/03/01";
+		string q2f = "/05/31";
+		string q3s = "/07/01";
+		string q3f = "/09/31";
+		string q4s = "/10/01";
+		string q4f = "/12/31";
+		q1f.insert(0, date);
+		q1s.insert(0, date);
+		pstmt = con->prepareStatement("SELECT book_name,amount FROM previous_purchases_s WHERE date_sold between ? and ?");
+		pstmt->setString(1, q1s);
+		pstmt->setString(2, q1f);
+		res = pstmt->executeQuery();
+		while (res->next())
+		{
+			bookN = res->getString("book_name");
+			amountemp = res->getInt("amount");
+			pstmt = con->prepareStatement("SELECT price_sold from all_books WHERE book_name = ?");
+			pstmt->setString(1, bookN);
+			res2 = pstmt->executeQuery();
+			while (res2->next())
+				q1 += res2->getInt("price_sold")*amountemp;
+		}
+
+		pstmt = con->prepareStatement("SELECT book_name,amount FROM previous_purchases_s WHERE date_sold between ? and ?");
+		pstmt->setString(1, q2s);
+		pstmt->setString(2, q2f);
+		res = pstmt->executeQuery();
+		while (res->next())
+		{
+			bookN = res->getString("book_name");
+			amountemp = res->getInt("amount");
+			pstmt = con->prepareStatement("SELECT price_sold from all_books WHERE book_name = ?");
+			pstmt->setString(1, bookN);
+			res2 = pstmt->executeQuery();
+			while (res2->next())
+				q2 += res2->getInt("price_sold")*amountemp;
+		}
+
+		pstmt = con->prepareStatement("SELECT book_name,amount FROM previous_purchases_s WHERE date_sold between ? and ?");
+		pstmt->setString(1, q3s);
+		pstmt->setString(2, q3f);
+		res = pstmt->executeQuery();
+		while (res->next())
+		{
+			bookN = res->getString("book_name");
+			amountemp = res->getInt("amount");
+			pstmt = con->prepareStatement("SELECT price_sold from all_books WHERE book_name = ?");
+			pstmt->setString(1, bookN);
+			res2 = pstmt->executeQuery();
+			while (res2->next())
+				q3 += res2->getInt("price_sold")*amountemp;
+		}
+
+		pstmt = con->prepareStatement("SELECT book_name,amount FROM previous_purchases_s WHERE date_sold between ? and ?");
+		pstmt->setString(1, q4s);
+		pstmt->setString(2, q4f);
+		res = pstmt->executeQuery();
+		while (res->next())
+		{
+			bookN = res->getString("book_name");
+			amountemp = res->getInt("amount");
+			pstmt = con->prepareStatement("SELECT price_sold from all_books WHERE book_name = ?");
+			pstmt->setString(1, bookN);
+			res2 = pstmt->executeQuery();
+			while (res2->next())
+				q4 += res2->getInt("price_sold")*amountemp;
+		}
+		cout << "Total sales of year " << date << " is: " << endl << "Q1: " << q1 << " Q2: " << q2 << " Q3: " << q3 << " Q4: " << q4 << endl;
+		delete con;
+		delete res;
+		delete pstmt;
+	}
+	catch (sql::SQLException &e) {
+		cout << "# ERR: SQLException in " << __FILE__;
+		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+		cout << "# ERR: " << e.what();
+		cout << " (MySQL error code: " << e.getErrorCode();
+		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+	}
+}
 void Q17(string userName, string password) {
 	try {
 		sql::ResultSet *res;
