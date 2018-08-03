@@ -457,10 +457,54 @@ void Q17(string userName, string password) {
 		res = pstmt->executeQuery();
 		while (res->next())
 			counter++;
-		cout << "The number of customers is: " << counter;
+		cout << "The number of customers is: " << counter << endl;
 		delete con;
 		delete res;
 		delete pstmt;
+	}
+	catch (sql::SQLException &e) {
+		cout << "# ERR: SQLException in " << __FILE__;
+		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+		cout << "# ERR: " << e.what();
+		cout << " (MySQL error code: " << e.getErrorCode();
+		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+	}
+}
+void Q18(string userName, string password) {
+	try {
+		sql::ResultSet *res, *res2;
+		sql::PreparedStatement *pstmt;
+		sql::Connection *con;
+		con = getcon(userName, password);
+
+		int sum = 0, amount;;
+		string date1, date2,name;
+		cout << "Enter the starting Date (yyyy/mm/dd): ";
+		cin >> date1;
+		cout << "Enter the end Date (yyyy/mm/dd): ";
+		cin >> date2;
+		cout << "Enter the Provider name: ";
+		cin >> name;
+
+		pstmt = con->prepareStatement("SELECT book_name,amount FROM previous_purchases_s where provider_name = ? AND date_sold between ? and ?");
+		pstmt->setString(1, name);
+		pstmt->setString(2, date1);
+		pstmt->setString(3, date2);
+		pstmt->executeUpdate();
+		res = pstmt->executeQuery();
+		while (res->next()) {
+			pstmt = con->prepareStatement("SELECT price_bought FROM all_books where provider_name = ? AND book_name= ?");
+			pstmt->setString(1, name);
+			amount = res->getInt("amount");
+			pstmt->setString(2, res->getString("book_name"));
+			pstmt->executeUpdate();
+			res2 = pstmt->executeQuery();
+			while (res2->next()) {
+				sum += res2->getInt("price_bought")*amount;
+			}
+		}
+		cout << "Total purcheses from the provider: " << name << " between the dates " << date1 << " and " << date2 << " is: " << sum << endl;
+
 	}
 	catch (sql::SQLException &e) {
 		cout << "# ERR: SQLException in " << __FILE__;

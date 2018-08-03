@@ -71,7 +71,7 @@ void setupdb(string userName, string password) {
 		stmt->execute("INSERT INTO previous_purchases_c VALUES('Fairy Tail',1,1,3,'2017/03/25'),('All my sons',2,2,5,'2013/05/18'),('Fairy Tail',3,3,9,'2011/03/14'),('GuttyStory',4,4,8,'2016/05/04');");
 		stmt->execute("DROP TABLE IF EXISTS previous_purchases_s");
 		stmt->execute("CREATE TABLE if not exists previous_purchases_s (book_name varchar(20), provider_name varchar(20), amount int, date_sold date)");
-		stmt->execute("INSERT INTO previous_purchases_s VALUES('Fairy Tail','BK-fun',3,'2017/03/25'),('All my sons','Kadosh',5,'2013/05/18'),('Fairy Tail','BK-fun',9,'2011/03/14'),('GuttyStory','Vjump',8,'2015/05/04');");
+		stmt->execute("INSERT INTO previous_purchases_s VALUES('Fairy Tail','BK-fun',3,'2017/03/25'),('All my sons','Kadosh',5,'2013/05/18'),('Fairy Tail','BK-fun',9,'2011/03/14'),('GuttyStory','Vjump',8,'2015/05/04'),('All my sons','Kadosh',2,'2010/05/18');");
 
 		delete stmt;
 		delete con;
