@@ -384,7 +384,6 @@ void Q13(string userName, string password) {
 		sql::Connection *con;
 		con = getcon(userName, password);
 
-		int id;
 		string Sdate;
 		string Edate;
 		int counter = 0;
@@ -440,7 +439,47 @@ void Q14(string userName, string password) {
 	delete pstmt;
 }
 void Q15(string userName, string password) {
-
+	try {
+		sql::ResultSet *res;
+		sql::PreparedStatement *pstmt;
+		sql::Connection *con;
+		con = getcon(userName, password);
+		string year;
+		int sum = 0,id,flag=1;
+		float dsum;
+		cout << "Enter the id: ";
+		cin >> id;
+		cout << "Enter the Year: ";
+		cin >> year;
+		pstmt = con->prepareStatement("SELECT a.book_name,amount,b.price_sold FROM previous_purchases_c a inner join all_books b ON a.book_name=b.book_name AND a.buyer_id = ? AND year(date_sold) = ?");
+		pstmt->setInt(1, id);
+		pstmt->setString(2, year);
+		pstmt->executeUpdate();
+		res = pstmt->executeQuery();
+		while (res->next()) {
+			if (sum >= 1000) {
+				if (flag) {
+					dsum = sum;
+					flag = 0;
+				}
+				sum += res->getInt("price_sold")* res->getInt("amount")*0.9;
+			}
+			sum += res->getInt("price_sold")* res->getInt("amount");
+		}
+		if (sum >= 1000) {
+			cout << "Total discount for year: " << year << " was: " << float(sum - dsum) << endl;
+		}
+		else {
+			cout << "No discount was given in that year" << endl;
+		}
+	}
+	catch (sql::SQLException &e) {
+		cout << "# ERR: SQLException in " << __FILE__;
+		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+		cout << "# ERR: " << e.what();
+		cout << " (MySQL error code: " << e.getErrorCode();
+		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+	}
 }
 void Q17(string userName, string password) {
 	try {
