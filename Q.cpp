@@ -439,6 +439,9 @@ void Q14(string userName, string password) {
 	delete res;
 	delete pstmt;
 }
+void Q15(string userName, string password) {
+
+}
 void Q17(string userName, string password) {
 	try {
 		sql::ResultSet *res;
@@ -571,14 +574,14 @@ void Q20(string userName, string password) {
 		cin >> date1;
 		cout << "Enter the end Date (yyyy/mm/dd): ";
 		cin >> date2;
-		pstmt = con->prepareStatement("SELECT book_name,amount FROM previous_purchases_c where date_sold between ? and ? order by amount DESC LIMIT 10 ");
+		pstmt = con->prepareStatement("SELECT book_name,sum(amount) FROM previous_purchases_c where date_sold between ? and ? group by book_name order by sum(amount) desc LIMIT 10 ");
 		pstmt->setString(1, date1);
 		pstmt->setString(2, date2);
 		pstmt->executeUpdate();
 		res = pstmt->executeQuery();
 		while (res->next()) {
 			counter++;
-			cout << counter<<". "<<res->getString("book_name") << " amount: " << res->getInt("amount") << endl;;
+			cout << counter<<". "<<res->getString("book_name") << " amount: " << res->getInt(2) << endl;;
 		}
 	}
 	catch (sql::SQLException &e) {
