@@ -514,6 +514,51 @@ void Q18(string userName, string password) {
 		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
 	}
 }
+void Q19(string userName, string password) {
+	try {
+		sql::ResultSet *res, *res2;
+		sql::PreparedStatement *pstmt;
+		sql::Connection *con;
+		con = getcon(userName, password);
+		int id = 0;
+		int total = 0;
+		int amountemp = 0;
+		string date;
+		string bookN;
+		cout << "Insert employee id: ";
+		cin >> id;
+		getchar();
+		cout << "Type the date (yyyy/mm/dd): ";
+		getline(cin, date);
+
+		pstmt = con->prepareStatement("SELECT book_name,amount FROM previous_purchases_c WHERE employee_id = ? and date_sold >= ?");
+		pstmt->setInt(1, id);
+		pstmt->setString(2, date);
+		res = pstmt->executeQuery();
+		while (res->next())
+		{
+			bookN = res->getString("book_name");
+			amountemp = res->getInt("amount");
+			pstmt = con->prepareStatement("SELECT price_sold from all_books WHERE book_name = ?");
+			pstmt->setString(1, bookN);
+			res2 = pstmt->executeQuery();
+			while (res2->next())
+				total += res2->getInt("price_sold")*amountemp;
+		}
+		cout << "Total sales of employee id " << id << " is: " << total << endl;
+		delete con;
+		delete res;
+		delete pstmt;
+	}
+	catch (sql::SQLException &e) {
+		cout << "# ERR: SQLException in " << __FILE__;
+		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+		cout << "# ERR: " << e.what();
+		cout << " (MySQL error code: " << e.getErrorCode();
+		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+	}
+
+}
 void Q20(string userName, string password) {
 	try {
 		sql::ResultSet *res, *res2;
