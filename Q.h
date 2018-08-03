@@ -30,3 +30,5 @@ void Q14(string userName, string password);
 
 void Q17(string userName, string password);
 void Q18(string userName, string password);
+
+void Q20(string userName, string password);

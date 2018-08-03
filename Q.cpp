@@ -514,3 +514,33 @@ void Q18(string userName, string password) {
 		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
 	}
 }
+void Q20(string userName, string password) {
+	try {
+		sql::ResultSet *res, *res2;
+		sql::PreparedStatement *pstmt;
+		sql::Connection *con;
+		con = getcon(userName, password);
+		string date1, date2;
+		int counter = 0;
+		cout << "Enter the starting Date (yyyy/mm/dd): ";
+		cin >> date1;
+		cout << "Enter the end Date (yyyy/mm/dd): ";
+		cin >> date2;
+		pstmt = con->prepareStatement("SELECT book_name,amount FROM previous_purchases_c where date_sold between ? and ? order by amount DESC LIMIT 10 ");
+		pstmt->setString(1, date1);
+		pstmt->setString(2, date2);
+		pstmt->executeUpdate();
+		res = pstmt->executeQuery();
+		while (res->next()) {
+			counter++;
+			cout << counter<<". "<<res->getString("book_name") << " amount: " << res->getInt("amount") << endl;;
+		}
+	}
+	catch (sql::SQLException &e) {
+		cout << "# ERR: SQLException in " << __FILE__;
+		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+		cout << "# ERR: " << e.what();
+		cout << " (MySQL error code: " << e.getErrorCode();
+		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+	}
+}
