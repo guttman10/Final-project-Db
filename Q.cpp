@@ -229,9 +229,8 @@ void Q9(string userName, string password) {
 		pstmt->setString(1, date);
 		pstmt->setString(2, name);
 		res = pstmt->executeQuery();
-		cout << "These are the book: " << name << " amount" << endl;
 		if (res->first())
-			cout << "The number of orders is:" << res->getInt(1) << endl;
+			cout << "The number of copies is:" << res->getInt(1) << endl;
 		delete con;
 		delete res;
 		delete pstmt;
@@ -264,9 +263,8 @@ void Q10(string userName, string password) {
 		pstmt->setString(1, date);
 		pstmt->setInt(2, id);
 		res = pstmt->executeQuery();
-		cout << "These are the amount of orders for customer id: " << id << endl;
 		if (res->first())
-			cout << "The number is:" << res->getInt(1)<<endl;
+			cout << "The number of copies is: "<< res->getInt(1)<<endl;
 		delete con;
 		delete res;
 		delete pstmt;
@@ -392,7 +390,7 @@ void Q13(string userName, string password) {
 		pstmt->setString(2, Edate);
 		res = pstmt->executeQuery();
 		if (res->first())
-		cout << "The number of orders is:" << res->getInt(1);
+			cout << "The number of orders is: " << res->getInt(1) << endl;
 		delete con;
 		delete res;
 		delete pstmt;
@@ -420,13 +418,13 @@ void Q14(string userName, string password) {
 	pstmt->setString(2, date2);
 	pstmt->executeUpdate();
 	res = pstmt->executeQuery();
-	cout << "Those are the sale between " << date1 << " and " << date2 << endl;
+	cout << "Those are the sales between " << date1 << " and " << date2 << endl;
 	if (!res->first()) {
 		cout << "No purcheses were made in those dates" << endl;
 		return;
 	}
 	while (res->next()) {
-		cout << "Book name: " << res->getString("book_name") <<" amount:  " <<res->getInt("amount")<<" date sold: "<< res->getString("date_sold") << endl;
+		cout << "Book name: " << res->getString("book_name") <<" amount: " <<res->getInt("amount")<<" date sold: "<< res->getString("date_sold") << endl;
 	}
 	delete con;
 	delete res;
@@ -442,7 +440,7 @@ void Q15(string userName, string password) {
 		int id,flag=0,sum=0,dsum;
 		cout << "Enter the id: ";
 		cin >> id;
-		cout << "Enter the Year: ";
+		cout << "Enter the year (yyyy): ";
 		cin >> year;
 		pstmt = con->prepareStatement("SELECT a.book_name,amount,b.price_sold FROM previous_purchases_c a inner join all_books b ON a.book_name=b.book_name AND a.buyer_id = ? AND year(date_sold) = ? order by date_sold ASC");
 		pstmt->setInt(1, id);
@@ -499,6 +497,12 @@ void Q16(string userName, string password) {
 		string q4f = "/12/31";
 		q1f.insert(0, date);
 		q1s.insert(0, date);
+		q2s.insert(0, date);
+		q2f.insert(0, date);
+		q3s.insert(0, date);
+		q3f.insert(0, date);
+		q4s.insert(0, date);
+		q4f.insert(0, date);
 		pstmt = con->prepareStatement("SELECT book_name,amount FROM previous_purchases_s WHERE date_sold between ? and ?");
 		pstmt->setString(1, q1s);
 		pstmt->setString(2, q1f);
@@ -606,7 +610,7 @@ void Q18(string userName, string password) {
 		sql::Connection *con;
 		con = getcon(userName, password);
 
-		int sum = 0, amount;;
+		int sum = 0, amount;
 		string date1, date2,name;
 		cout << "Enter the starting Date (yyyy/mm/dd): ";
 		cin >> date1;
@@ -707,7 +711,7 @@ void Q20(string userName, string password) {
 		res = pstmt->executeQuery();
 		while (res->next()) {
 			counter++;
-			cout << counter<<". "<<res->getString("book_name") << " amount: " << res->getInt(2) << endl;;
+			cout << counter<<". "<<res->getString("book_name") << " amount: " << res->getInt(2) << endl;
 		}
 	}
 	catch (sql::SQLException &e) {

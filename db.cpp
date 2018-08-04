@@ -70,10 +70,10 @@ void setupdb(string userName, string password) {
 		stmt->execute("INSERT INTO providers VALUE('Hod-Ami'), ('Vjump'), ('mathOfun'), ('BK-fun'), ('Kadosh');");
 		stmt->execute("DROP TABLE IF EXISTS previous_purchases_c");
 		stmt->execute("CREATE TABLE if not exists previous_purchases_c (book_name varchar(20), employee_id int ,buyer_id int, amount int, date_sold date)");
-		stmt->execute("INSERT INTO previous_purchases_c VALUES('Fairy Tail',1,1,3,'2017/03/25'),('All my sons',2,2,5,'2017/05/18'),('HOT',2,2,3,'2017/09/18'),('Fairy Tail',3,3,9,'2017/03/14'),('GuttyStory',4,4,8,'2018/05/03'),('All my sons',1,3,2,'2018/05/18'),('One Piece',4,2,4,'2018/01/04'),('GuttyStory',3,1,20,'2017/03/20'),('Death Note',2,1,1,'2018/06/06');");
+		stmt->execute("INSERT INTO previous_purchases_c VALUES('Fairy Tail',1,1,3,'2017/03/25'),('All my sons',2,2,5,'2017/05/18'),('HOT',2,2,3,'2017/09/18'),('Fairy Tail',3,3,9,'2017/03/14'),('GuttyStory',4,4,8,'2018/05/03'),('All my sons',1,3,2,'2018/05/18'),('One Piece',4,2,4,'2018/01/04'),('GuttyStory',3,1,20,'2017/08/20'),('Death Note',2,1,1,'2018/11/06');");
 		stmt->execute("DROP TABLE IF EXISTS previous_purchases_s");
 		stmt->execute("CREATE TABLE if not exists previous_purchases_s (book_name varchar(20), provider_name varchar(20), amount int, date_sold date)");
-		stmt->execute("INSERT INTO previous_purchases_s VALUES('Fairy Tail','BK-fun',3,'2017/03/25'),('All my sons','Kadosh',5,'2017/05/18'),('Fairy Tail','BK-fun',9,'2017/03/14'),('GuttyStory','Vjump',8,'2018/05/03'),('All my sons','Kadosh',2,'2018/05/18'),('One Piece','Monda',4,'2018/01/04'),('GuttyStory','Vjump',20,'2017/03/20'),('Death Note','Hoshima',10,'2018/06/06');");
+		stmt->execute("INSERT INTO previous_purchases_s VALUES('Fairy Tail','BK-fun',3,'2017/03/25'),('All my sons','Kadosh',5,'2017/05/18'),('Fairy Tail','BK-fun',9,'2017/03/14'),('GuttyStory','Vjump',8,'2018/05/03'),('All my sons','Kadosh',2,'2018/05/18'),('One Piece','Monda',4,'2018/01/04'),('GuttyStory','Vjump',20,'2017/08/20'),('Death Note','Hoshima',10,'2018/11/06');");
 
 		delete stmt;
 		delete con;
