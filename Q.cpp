@@ -83,7 +83,7 @@ void Q4(string userName, string password) {
 	sql::Connection *con;
 	con = getcon(userName, password);
 
-	pstmt = con->prepareStatement("SELECT * FROM providers");
+	pstmt = con->prepareStatement("SELECT name FROM providers");
 	res = pstmt->executeQuery();
 	cout << "These are the store providers" << endl;
 	while (res->next())
@@ -220,20 +220,18 @@ void Q9(string userName, string password) {
 		string date;
 		string tempName;
 		string tempDate;
-		int counter = 0;
 		getchar();
 		cout << "Enter the book you wish to check: ";
 		getline(cin, name);
 		cout << "Enter the Date (yyyy/mm/dd): ";
 		cin >> date;
-		pstmt = con->prepareStatement("SELECT amount FROM previous_purchases_c where date_sold >= ? and book_name = ?");
+		pstmt = con->prepareStatement("SELECT SUM(amount) FROM previous_purchases_c where date_sold >= ? and book_name = ?");
 		pstmt->setString(1, date);
 		pstmt->setString(2, name);
 		res = pstmt->executeQuery();
 		cout << "These are the book: " << name << " amount" << endl;
-		while (res->next())
-			counter += res->getInt("amount");
-		cout << "The amount is: " << counter;
+		if (res->first())
+			cout << "The number of orders is:" << res->getInt(1) << endl;
 		delete con;
 		delete res;
 		delete pstmt;
@@ -257,20 +255,18 @@ void Q10(string userName, string password) {
 		string date;
 		string tempName;
 		string tempDate;
-		int counter = 0;
 		getchar();
 		cout << "Enter the customer id : ";
 		cin >> id;
 		cout << "Enter the Date (yyyy/mm/dd): ";
 		cin >> date;
-		pstmt = con->prepareStatement("SELECT amount FROM previous_purchases_c where date_sold >= ? and buyer_id = ?");
+		pstmt = con->prepareStatement("SELECT SUM(amount) FROM previous_purchases_c where date_sold >= ? and buyer_id = ?");
 		pstmt->setString(1, date);
 		pstmt->setInt(2, id);
 		res = pstmt->executeQuery();
-		cout << "These are the amount of customer: " << id << endl;
-		while (res->next())
-			counter += res->getInt("amount");
-		cout << "The amount is:" << counter;
+		cout << "These are the amount of orders for customer id: " << id << endl;
+		if (res->first())
+			cout << "The number is:" << res->getInt(1)<<endl;
 		delete con;
 		delete res;
 		delete pstmt;
@@ -386,19 +382,17 @@ void Q13(string userName, string password) {
 
 		string Sdate;
 		string Edate;
-		int counter = 0;
 		getchar();
 		cout << "Enter the start Date (yyyy/mm/dd): ";
 		getline(cin, Sdate);
-		cout << "Enter the start Date (yyyy/mm/dd): ";
+		cout << "Enter the end Date (yyyy/mm/dd): ";
 		getline(cin, Edate);
-		pstmt = con->prepareStatement("SELECT * FROM orders where date_order BETWEEN ? and ?");
+		pstmt = con->prepareStatement("SELECT COUNT(*) FROM orders where date_order BETWEEN ? and ?");
 		pstmt->setString(1, Sdate);
 		pstmt->setString(2, Edate);
 		res = pstmt->executeQuery();
-		while (res->next())
-			counter++;
-		cout << "The number of orders is:" << counter;
+		if (res->first())
+		cout << "The number of orders is:" << res->getInt(1);
 		delete con;
 		delete res;
 		delete pstmt;
