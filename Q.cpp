@@ -445,26 +445,26 @@ void Q15(string userName, string password) {
 		sql::Connection *con;
 		con = getcon(userName, password);
 		string year;
-		int sum = 0,id,flag=1;
-		float dsum;
+		int id,flag=0,sum=0,dsum;
 		cout << "Enter the id: ";
 		cin >> id;
 		cout << "Enter the Year: ";
 		cin >> year;
-		pstmt = con->prepareStatement("SELECT a.book_name,amount,b.price_sold FROM previous_purchases_c a inner join all_books b ON a.book_name=b.book_name AND a.buyer_id = ? AND year(date_sold) = ?");
+		pstmt = con->prepareStatement("SELECT a.book_name,amount,b.price_sold FROM previous_purchases_c a inner join all_books b ON a.book_name=b.book_name AND a.buyer_id = ? AND year(date_sold) = ? order by date_sold ASC");
 		pstmt->setInt(1, id);
 		pstmt->setString(2, year);
 		pstmt->executeUpdate();
 		res = pstmt->executeQuery();
 		while (res->next()) {
-			if (sum >= 1000) {
-				if (flag) {
-					dsum = sum;
-					flag = 0;
-				}
-				sum += res->getInt("price_sold")* res->getInt("amount")*0.9;
-			}
 			sum += res->getInt("price_sold")* res->getInt("amount");
+			if (sum >= 1000) {
+				if (flag == 1)
+				dsum += (res->getInt("price_sold")* res->getInt("amount"))*0.9;
+				else {
+					dsum = sum;
+					flag = 1;
+				}
+			}
 		}
 		if (sum >= 1000) {
 			cout << "Total discount for year: " << year << " was: " << float(sum - dsum) << endl;
@@ -584,18 +584,15 @@ void Q17(string userName, string password) {
 		sql::Connection *con;
 		con = getcon(userName, password);
 
-		int id;
 		string date;
-		int counter = 0;
 		getchar();
 		cout << "Enter the Date (yyyy/mm/dd): ";
 		getline(cin, date);
-		pstmt = con->prepareStatement("SELECT * FROM customers where date_joined >= ?");
+		pstmt = con->prepareStatement("SELECT COUNT(date_joined) FROM customers where date_joined >= ?");
 		pstmt->setString(1, date);
 		res = pstmt->executeQuery();
-		while (res->next())
-			counter++;
-		cout << "The number of customers is: " << counter << endl;
+		if (res->first())
+		cout << "The number of new customers is: " << res->getInt(1) << endl;
 		delete con;
 		delete res;
 		delete pstmt;
